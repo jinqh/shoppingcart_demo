@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #tab {
+            border-collapse: collapse;
+        }
+        #tab td{
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <table id="tab">
+        <tr>
+            <th>序号</th>
+            <th>商品名</th>
+            <th>商品单价</th>
+            <th>数量</th>
+        </tr>
+    </table>
+
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+        var str = $.cookie('cart') ? $.cookie('cart') : '';
+        var obj = convertStrToObj(str);
+        if (str) {
+            for (var id in obj) {
+                var product = obj[id];
+                $('#tab').append('<tr>' + '<td>' + id + '</td>' + '<td>' + product.name + '</td>' + '<td>' + product.price + '</td>' + '<td>' + product.num + '</td>' + '</tr>');
+            }
+        }
+
+        function convertStrToObj(str) {
+            if (!str) {
+                return {};
+            }
+            return JSON.parse(str);
+        }
+    </script>
+</body>
+</html>

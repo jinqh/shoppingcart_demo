@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #tab {
+            border-collapse: collapse;
+        }
+        #tab td{
+            border: 1px solid;
+        }
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <table id="tab">
+        <tr>
+            <th>商品名</th>
+            <th>价格</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td><input type="hidden" data-good-id="product1">水杯</td>
+            <td>29</td>
+            <td><a href="##" class="buy">购买</a></td>
+        </tr>
+        <tr>
+            <td><input type="hidden" data-good-id="product2">电脑</td>
+            <td>4999</td>
+            <td><a href="##" class="buy">购买</a></td>
+        </tr>
+        <tr>
+            <td><input type="hidden" data-good-id="product3">手机</td>
+            <td>1999</td>
+            <td><a href="##" class="buy">购买</a></td>
+        </tr>
+    </table>
+    <a href="##" id="cart">查看购物车</a>
+
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+        /*
+            {
+                "product1": {
+                    name: ...,
+                    price: ...,
+                    num: ...
+                },
+                "product2": {
+                    name: ...,
+                    price: ...,
+                    num: ...
+                },
+                "product3": {
+                    name: ...,
+                    price: ...,
+                    num: ...
+                }
+            }
+        */
+        $('.buy').each(function(index, value) {
+            $(value).click(function() {
+                var id = $(this).parent().prev().prev().find('input').attr('data-good-id');
+                var name = $(this).parent().prev().prev().text();
+                var price = $(this).parent().prev().text();
+
+                var str = $.cookie('cart') ? $.cookie('cart') : '';
+                var obj = convertStrToObj(str);
+                
+                if (id in obj) {
+                    obj[id].num++;
+                } else {
+                    obj[id] = {
+                        "name": name,
+                        "price": price,
+                        "num": 1
+                    };
+                }
+                
+                $.cookie('cart', JSON.stringify(obj), {expires: 7, path: '/'});
+                //alert(decodeURIComponent(document.cookie));
+            });
+        });
+
+        $('#cart').click(function() {
+            location.href = 'cart.html';
+        });
+
+        function convertStrToObj(str) {
+            if (!str) {
+                return {};
+            }
+            return JSON.parse(str);
+        }
+    </script>
+</body>
+</html>
